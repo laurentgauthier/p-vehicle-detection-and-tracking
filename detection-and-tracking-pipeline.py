@@ -28,9 +28,9 @@ hog_channel = dist_pickle["hog_channel"]
 
 print(colorspace)
 search_params = [
-    (400, 700, 1.5),
+    (400, 700, 0.75),
     (400, 600, 1),
-    (400, 500, 0.75),
+    (400, 700, 1.5),
     (400, 500, 0.65),
     (400, 450, 0.5),
     (400, 440, 0.4),
@@ -79,7 +79,7 @@ def process_frame(image):
     global past_bboxes
 
     bboxes = []
-    for index in range(4):
+    for index in range(1):
         ystart = search_params[index][0]
         ystop = search_params[index][1]
         scale = search_params[index][2]
@@ -89,7 +89,7 @@ def process_frame(image):
         bboxes = bboxes + more_bboxes
 
     hot_bboxes = heat.find_hot_bboxes(bboxes, past_bboxes, heatmap_threshold=1)
-    #out_image = utilities.draw_boxes(image, hot_bboxes)
+    #out_image = utilities.draw_boxes(image, bboxes)
     out_image = utilities.draw_valid_boxes(image, hot_bboxes, past_bboxes)
     #out_image = past_bboxes.draw_past_bboxes(image)
 

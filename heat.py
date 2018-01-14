@@ -36,7 +36,7 @@ def find_hot_bboxes(bboxes, past_bboxes, heatmap_threshold=2):
     # First draw a heatmap
     heatmap = np.zeros((720, 1280)) # FIXME Hardcoded image size
     add_heat(heatmap, bboxes)
-    past_bboxes.add_heat(heatmap)
+    #past_bboxes.add_heat(heatmap)
     apply_threshold(heatmap, heatmap_threshold)
 
     # Then label the likely vehicles, and draw bounding boxes for each
