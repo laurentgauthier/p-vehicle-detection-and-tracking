@@ -14,7 +14,7 @@ The goals and steps for this project are the following:
 * Estimate a bounding box for each detected vehicles.
 
 [//]: # (Image References)
-[image3]: ./output_images/test3.png
+[image3]: ./output_images/test3.jpg
 [image6]: ./output_images/test6.jpg
 [video1]: ./project_video.mp4
 
@@ -105,34 +105,28 @@ This allowed to achieve vehicle detection both far and close as illustrated belo
 
 ![alt text][image6]
 
+## Merging Classifier Detections
+
+In order to process the multiple detections and merge them the code uses a combination of 
+heatmap and labeling, as illustrated in the code below found in `heat.py`:
+
+```python
+def find_bboxes(bboxes, heatmap_threshold=2):
+    # First draw a heatmap
+    heatmap = np.zeros((720, 1280)) # FIXME Hardcoded image size
+    add_heat(heatmap, bboxes)
+    apply_threshold(heatmap, heatmap_threshold)
+
+    # Then label the likely vehicles, and their bounding boxes
+    labeled_image, n_labels = label(heatmap)
+    labeled_bboxes = find_labeled_bboxes(labeled_image, n_labels)
+
+    return labeled_bboxes
+```
+
 # Video Implementation
 
 Here's a [link to my video result](./project_result.mp4)
-
-
-I recorded the positions of positive detections in each frame of the video.
-From the positive detections I created a heatmap and then thresholded that
-map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()`
-to identify individual blobs in the heatmap.
-
-I then assumed each blob corresponded to a vehicle.  I constructed bounding
-boxes to cover the area of each blob detected.  
-
-Here's an example result showing the heatmap from a series of frames of video,
-the result of `scipy.ndimage.measurements.label()` and the bounding boxes then
-overlaid on the last frame of video:
-
-Here are six frames and their corresponding heatmaps:
-
-![alt text][image5]
-
-Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
-
-![alt text][image6]
-
-Here the resulting bounding boxes are drawn onto the last frame in the series:
-
-![alt text][image7]
 
 
 # Discussion
