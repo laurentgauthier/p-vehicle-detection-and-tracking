@@ -25,9 +25,10 @@ The goals and steps for this project are the following:
 
 # Code
 
+The main entry points for this code are:
 
-
-# Training
+* `training.py`: the main script to run the Linear SVM training.
+* `detection-and-tracking-pipeline.py`: the main script to run the video processing pipeline.
 
 The code for training the Linear SVM is found in `training.py`, and saves the result of the
 training process for later use in a pickle file named `svc_vehicles.p`.
@@ -38,6 +39,15 @@ python3 training.py
 
 This pickle dump contains all the relevant parameters necessary later to use the SVM for
 predictions.
+
+The video processing pipeline can be run using the `detection-and-tracking-pipeline.py`
+script as follows:
+
+```sh
+python3 detection-and-tracking-pipeline.py project_video.mp4 project_result.mp4
+```
+
+# Training
 
 The training code starts by reading in all the `vehicle` and `non-vehicle` images, splits the
 full set of training images in a training and a test set with a ratio of 80% to 20%.
@@ -79,11 +89,6 @@ Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spat
 
 Here's a [link to my video result](./project_result.mp4)
 
-It was produced using the `detection-and-tracking-pipeline.py` script as follows:
-
-```sh
-python3 detection-and-tracking-pipeline.py project_video.mp4 project_result.mp4
-```
 
 I recorded the positions of positive detections in each frame of the video.
 From the positive detections I created a heatmap and then thresholded that
