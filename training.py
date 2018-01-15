@@ -71,8 +71,8 @@ orient = 9
 pix_per_cell = 8
 cell_per_block = 2
 hog_channel = "ALL" # Can be 0, 1, 2, or "ALL"
-spatial_size = (16, 16)
-hist_bins = 16
+spatial_size = (32, 32)
+hist_bins = 32
 
 # Extract the features
 vehicle_features = extract_features(vehicles, cspace=colorspace, orient=orient,
@@ -93,7 +93,7 @@ y = np.hstack((np.ones(len(vehicle_features)), np.zeros(len(non_vehicle_features
 
 # Split up data into randomized training and test sets
 rand_state = np.random.randint(0, 100)
-X_train, X_test, y_train, y_test = train_test_split(scaled_X, y, test_size=0.05, random_state=rand_state)
+X_train, X_test, y_train, y_test = train_test_split(scaled_X, y, test_size=0.2, random_state=rand_state)
 
 print('Using:',orient,'orientations', pix_per_cell,
     'pixels per cell and', cell_per_block,'cells per block')

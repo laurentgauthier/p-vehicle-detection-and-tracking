@@ -7,7 +7,8 @@ from sklearn.preprocessing import StandardScaler
 import utilities
 
 # Define a single function that can extract features using hog sub-sampling and make predictions
-def find_things(image, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block, hog_channel, cspace='RGB', spatial_size=(32, 32), hist_bins=32):
+def find_things(image, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block,
+                hog_channel, cspace='RGB', spatial_size=(32, 32), hist_bins=32):
 
     bboxes = []
 
@@ -109,6 +110,7 @@ if __name__ == '__main__':
     pix_per_cell = dist_pickle["pix_per_cell"]
     cell_per_block = dist_pickle["cell_per_block"]
     colorspace = dist_pickle["colorspace"]
+    hog_channel = dist_pickle["hog_channel"]
     spatial_size = dist_pickle["spatial_size"]
     hist_bins = dist_pickle["hist_bins"]
 
@@ -116,10 +118,18 @@ if __name__ == '__main__':
 
     ystart = 400
     ystop = 500
-    scale = 0.75
 
+    scale = 0.75
     bboxes = find_things(image, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block,
-                            cspace=colorspace, spatial_size=spatial_size, hist_bins=hist_bins)
+                         hog_channel, cspace=colorspace, spatial_size=spatial_size, hist_bins=hist_bins)
+    ystop = 550
+    scale = 1.0
+    bboxes += find_things(image, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block,
+                         hog_channel, cspace=colorspace, spatial_size=spatial_size, hist_bins=hist_bins)
+    ystop = 600
+    scale = 1.5
+    bboxes += find_things(image, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block,
+                         hog_channel, cspace=colorspace, spatial_size=spatial_size, hist_bins=hist_bins)
 
     out_image = utilities.draw_boxes(image, bboxes)
 

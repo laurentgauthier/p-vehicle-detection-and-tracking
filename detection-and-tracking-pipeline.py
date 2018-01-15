@@ -28,13 +28,9 @@ hog_channel = dist_pickle["hog_channel"]
 
 print(colorspace)
 search_params = [
-    (400, 700, 0.75),
-    (400, 600, 1),
-    (400, 700, 1.5),
-    (400, 500, 0.65),
-    (400, 450, 0.5),
-    (400, 440, 0.4),
-    (400, 700, 2.0),
+    (400, 600, 1.5),
+    (400, 550, 1),
+    (400, 500, 0.75),
 ]
 
 class PastDetections:
@@ -74,29 +70,31 @@ class PastDetections:
                     return True
         return False
 
+counter = 0
+hot_bboxes = []
+
 def process_frame(image):
     global svc, X_scaler, orient, pix_per_cell, cell_per_block, colorspace, spatial_size, hist_bins, hog_channel
-    global past_bboxes
+    global counter, hot_bboxes, past_bboxes
 
     bboxes = []
-    for index in range(1):
+    for index in range(3):
         ystart = search_params[index][0]
         ystop = search_params[index][1]
         scale = search_params[index][2]
 
-        more_bboxes = find_things.find_things(image, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block,
+        bboxes += find_things.find_things(image, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block,
                                               hog_channel, cspace=colorspace, spatial_size=spatial_size, hist_bins=hist_bins)
-        bboxes = bboxes + more_bboxes
 
-    hot_bboxes = heat.find_hot_bboxes(bboxes, past_bboxes, heatmap_threshold=1)
-    #out_image = utilities.draw_boxes(image, bboxes)
-    out_image = utilities.draw_valid_boxes(image, hot_bboxes, past_bboxes)
+    cars_bboxes = heat.find_bboxes(bboxes, heatmap_threshold=1)
+    out_image = utilities.draw_boxes(image, cars_bboxes)
+    #out_image = utilities.draw_valid_boxes(image, hot_bboxes, past_bboxes)
     #out_image = past_bboxes.draw_past_bboxes(image)
 
     # Keep a history of the recent past detections
-    past_bboxes.add_bboxes(hot_bboxes)
+    #past_bboxes.add_bboxes(hot_bboxes)
 
     return out_image
 
-past_bboxes = PastDetections(2)
+past_bboxes = PastDetections(3)
 video.process_clip(input_video_file, output_video_file, process_frame)
