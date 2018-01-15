@@ -16,11 +16,6 @@ The goals and steps for this project are the following:
 [//]: # (Image References)
 [image1]: ./examples/car_not_car.png
 [image2]: ./examples/HOG_example.jpg
-[image3]: ./examples/sliding_windows.jpg
-[image4]: ./examples/sliding_window.jpg
-[image5]: ./examples/bboxes_and_heat.png
-[image6]: ./examples/labels_map.png
-[image7]: ./examples/output_bboxes.png
 [video1]: ./project_video.mp4
 
 # Code Overview
@@ -76,20 +71,39 @@ As for the HOG parameters I have settled on `orientations=9`, `pixels_per_cell=(
 The feature vector is extended with spatially binned color and histograms of color in the
 feature vector, which provided satisfying results.
 
+# Image Processing
 
-## Sliding Window Search
+Here are some details about the implementation choices made for the image processing.
 
-#### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
+## HOG Sub-Sampling Window
 
-I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
+In order to scan the full image for vehicles the implementation uses a HOG sub-sampling
+technique in order to minimize the number of HOG computations.
+
+This can be seen in `find_things.py`.
+
+The overlap between successive windows is of 75%, which helps with the quality of the
+detection but comes at a cost of computing.
+
+## Multiple Scales Search
+
+In order to properly detect vehicles that are close and far it has proved necessary to
+run a search at various scales.
+
+This can be seen in the code of the main video pipeline in `detection-and-tracking-pipeline.py`
+and also in `find_thing.py` which was used during the experimentation.
+
+The code performs a search at three scales:
+
+* 1.5
+* 1
+* 0.75
+
+This allowed to achieve vehicle detection both far and close as illustrated below:
 
 ![alt text][image3]
 
-#### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
-
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
-
-![alt text][image4]
+![alt text][image6]
 
 # Video Implementation
 

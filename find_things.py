@@ -133,5 +133,7 @@ if __name__ == '__main__':
 
     out_image = utilities.draw_boxes(image, bboxes)
 
-    plt.imshow(out_image)
-    plt.show()
+    #plt.imshow(out_image)
+    #plt.show()
+    save_image = cv2.cvtColor(out_image, cv2.COLOR_BGR2RGB)
+    cv2.imwrite(sys.argv[2], save_image)
