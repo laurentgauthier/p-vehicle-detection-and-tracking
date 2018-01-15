@@ -11,7 +11,7 @@ The goals and steps for this project are the following:
   search for vehicles in images.
 * Run the pipeline on a video stream and create a heat map of recurring
   detections frame by frame to reject outliers and follow detected vehicles.
-* Estimate a bounding box for the detected vehicles.
+* Estimate a bounding box for each detected vehicles.
 
 [//]: # (Image References)
 [image1]: ./examples/car_not_car.png
@@ -39,12 +39,13 @@ python3 training.py
 This pickle dump contains all the relevant parameters necessary later to use the SVM for
 predictions.
 
-The training code start by reading in all the `vehicle` and `non-vehicle` images, split the
+The training code starts by reading in all the `vehicle` and `non-vehicle` images, splits the
 full set of training images in a training and a test set with a ratio of 80% to 20%.
 
 ## Histogram of Oriented Gradients (HOG)
 
-I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
+I then explored different color spaces and different `skimage.hog()` parameters
+(`orientations`, `pixels_per_cell`, and `cells_per_block`).
 
 example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
 
@@ -114,7 +115,7 @@ Here the resulting bounding boxes are drawn onto the last frame in the series:
 ## Classifier Training
 
 The training of the vehicle/non-vehicle classifier has not been a challenge, and a
-score of over 94% was consistently achieved.
+score of over 94% (and up to 98%) was consistently achieved.
 
 ## Parameter Tuning
 
