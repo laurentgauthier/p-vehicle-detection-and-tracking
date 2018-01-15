@@ -23,7 +23,7 @@ The goals and steps for this project are the following:
 [image7]: ./examples/output_bboxes.png
 [video1]: ./project_video.mp4
 
-# Code
+# Code Overview
 
 The main entry points for this code are:
 
@@ -47,29 +47,35 @@ script as follows:
 python3 detection-and-tracking-pipeline.py project_video.mp4 project_result.mp4
 ```
 
+The implementation of the individual steps of the pipeline are imported from the following files:
+
+* `find_things.py`: the main function in charge of running HOG sub-sampling
+* `heat.py`: heatmap and bounding boxes processing
+* `utilities.py`: a number of utility functions for color spaces, HOG implementation during training
+  and drawing functions
+* `video.py`: utility functions for the video processing
+* `past.py`: an unfinished attempt at leveraging detections from previous frames to improve
+  the detection on the current frame
+
 # Training
 
 The training code starts by reading in all the `vehicle` and `non-vehicle` images, splits the
 full set of training images in a training and a test set with a ratio of 80% to 20%.
 
+## Color space
+
+After a number of experimentations the `YCrCb` color space was selected as it delivered better
+results than the alternatives.
+
 ## Histogram of Oriented Gradients (HOG)
 
-I then explored different color spaces and different `skimage.hog()` parameters
-(`orientations`, `pixels_per_cell`, and `cells_per_block`).
+As for the HOG parameters I have settled on `orientations=9`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
 
-example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
+## Spatial Binning and Color Histogram
 
+The feature vector is extended with spatially binned color and histograms of color in the
+feature vector, which provided satisfying results.
 
-![alt text][image2]
-
-
-#### 2. Explain how you settled on your final choice of HOG parameters.
-
-I tried various combinations of parameters and...
-
-#### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
-
-I trained a linear SVM using...
 
 ## Sliding Window Search
 
