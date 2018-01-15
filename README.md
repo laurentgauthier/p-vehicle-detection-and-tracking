@@ -23,23 +23,34 @@ The goals and steps for this project are the following:
 [image7]: ./examples/output_bboxes.png
 [video1]: ./project_video.mp4
 
+# Code
+
+
 
 # Training
 
-# Histogram of Oriented Gradients (HOG)
+The code for training the Linear SVM is found in `training.py`, and saves the result of the
+training process for later use in a pickle file named `svc_vehicles.p`.
 
-The code for this step is contained in the first code cell of the IPython notebook (or in lines # through # of the file called `some_file.py`).  
+```sh
+python3 training.py
+```
 
-I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
+This pickle dump contains all the relevant parameters necessary later to use the SVM for
+predictions.
 
-![alt text][image1]
+The training code start by reading in all the `vehicle` and `non-vehicle` images, split the
+full set of training images in a training and a test set with a ratio of 80% to 20%.
+
+## Histogram of Oriented Gradients (HOG)
 
 I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
 
-Here is an example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
+example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
 
 
 ![alt text][image2]
+
 
 #### 2. Explain how you settled on your final choice of HOG parameters.
 
@@ -49,7 +60,7 @@ I tried various combinations of parameters and...
 
 I trained a linear SVM using...
 
-# Sliding Window Search
+## Sliding Window Search
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
@@ -66,6 +77,12 @@ Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spat
 # Video Implementation
 
 Here's a [link to my video result](./project_result.mp4)
+
+It was produced using the `detection-and-tracking-pipeline.py` script as follows:
+
+```sh
+python3 detection-and-tracking-pipeline.py project_video.mp4 project_result.mp4
+```
 
 I recorded the positions of positive detections in each frame of the video.
 From the positive detections I created a heatmap and then thresholded that
@@ -118,7 +135,9 @@ As implemented this algorithm implemented in software is not running at an accep
 speed.
 
 Some ideas for improving performance could be to not run the full algorithm at a 25Hz
-rate. A rate of 5Hz could be acceptable.
+rate, but instead running it at a rate of 5Hz and implement a lighter weight tracking
+algorithm for identified vehicles, using for example local correlation to track
+vehicle movement from frame to frame.
 
 Obviously some of the performance issues observed could become less relevant if the
 implementation used hardware acceleration in the form of GPU use, or FPGAs. Still the
